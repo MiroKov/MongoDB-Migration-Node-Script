@@ -1,11 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const streamArray = require("stream-json/utils/StreamArray");
-const dataPath = path.join(__dirname, 'files', 'm3-customer-data.json');
-const addressPath = path.join(__dirname, 'files', 'm3-customer-address-data.json');
 const asnyc = require('async');
 
-// read chunks serially
+// read chunks serially  -- not used
 const readJSONChunks = (filepath, chunksize, next) => {
     const stream = streamArray.make();
     let obj = [];
@@ -36,7 +34,7 @@ const readJSONParts = (filepath, chunksize, selection, next) => {
     fs.createReadStream(filepath).pipe(stream.input);
 }
 
-exports.putTogether = (filepath1, filepath2, chunksize, selection, next) => {
+exports.putTogether = (filepath1, filepath2, migrationDirPath, chunksize, selection, next) => {
     asnyc.parallel(
         {
             "file1": (callback) => readJSONParts(filepath1, chunksize, selection, callback),
@@ -50,14 +48,28 @@ exports.putTogether = (filepath1, filepath2, chunksize, selection, next) => {
                 Object.assign(results.file1[i], results.file2[i]);
             }
             // write to file in migrations folder - not required in assingment
-            const migrationPath = path.join(__dirname, 'migrations', `data_${selection}.json`);
-            writeFile(migrationPath, JSON.stringify(results.file1, null, 2));
-            console.log('Creating migration file: \'' + migrationPath + '\'.');
+            let migrationFilePath = path.join(migrationDirPath, `data_${selection}.json`);
+            writeFile(migrationFilePath, JSON.stringify(results.file1, null, 2));
+            console.log('Creating migration file: \'' + migrationFilePath + '\'.');
             // results go to callback
             next(null, results.file1);
         }
     );
 }
+
+//clear migrations directory
+exports.prepareMigrations = (dirpath, next) => {
+    fs.readdir(dirpath, (err, files) => {
+        if (err) throw err;
+        for (const file of files) {
+            fs.unlink(path.join(dirpath, file), err => {
+                if (err) throw err;
+            });
+        }
+    });
+    console.log('Migration directory cleared.');
+}
+
 
 const writeFile = (filepath, data) => {
 
@@ -65,5 +77,3 @@ const writeFile = (filepath, data) => {
         if (err) throw err;
     });
 }
-
-// putTogether(dataPath, addressPath, 50, 1);
