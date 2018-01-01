@@ -1,0 +1,25 @@
+{
+  "name": "MongoDB-Migration-Node-Script",
+  "version": "1.0.0",
+  "description": "You work at a Bitcoin exchange company. For some reason, the customer data is missing its full address.\r You have customer data only with the street address (building number and street name) but no city, state, country.\r Also, phone numbers are missing too. \r Luckily, your friends were able to restore the address information from a backup replica of a MongoDB instance. \r You need to write a migration/restoration script which will merge the data from the two sources.  \r You have millions of records so you need to create a script which can run queries to the database in parallel.\r You don't know what is the optimal number of customers to insert into a database at a time,\r so you need to write the program to allow for a variable number of documents to be able to be updated at once.\r This will help to determine if it's better to update in groups of 10, 50 or maybe 500 at a time.  \r You are provided with two sample JSON files customer-data.json and customer-address-data.json which contain 1000 documents/objects \r (remember, the real data will have 1000000+ objects).\r Assume that the order of the objects in each file correlates to objects in the other file.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiroKov/MongoDB-Migration-Node-Script.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MiroKov/MongoDB-Migration-Node-Script/issues"
+  },
+  "homepage": "https://github.com/MiroKov/MongoDB-Migration-Node-Script#readme",
+  "dependencies": {
+    "async": "2.6.0",
+    "mongodb": "3.0.1",
+    "stream-json": "0.5.2"
+  }
+}
