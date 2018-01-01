@@ -56,20 +56,36 @@ exports.putTogether = (filepath1, filepath2, migrationDirPath, chunksize, select
         }
     );
 }
+const migrationDirExists = (dirpath, next) => {
+    fs.access('/etc/passwd', fs.constants.R_OK | fs.constants.W_OK, (err) => {
+        err ? next(false) : next(true);
+    });
+}
 
 //clear migrations directory
 exports.prepareMigrations = (dirpath, next) => {
-    fs.readdir(dirpath, (err, files) => {
-        if (err) throw err;
-        for (const file of files) {
-            fs.unlink(path.join(dirpath, file), err => {
-                if (err) throw err;
+
+    migrationDirExists(dirpath, (exists) => {
+        if (!exists) {
+            console.log('creating migrations directory.')
+            fs.mkdirSync(dirpath);
+        }
+        else {
+            fs.readdir(dirpath, (err, files) => {
+                if (err) {
+                    next(err);
+                };
+                for (const file of files) {
+                    fs.unlink(path.join(dirpath, file), err => {
+                        if (err) throw err;
+                    });
+                }
             });
+            console.log('Migration directory cleared.');
         }
     });
-    console.log('Migration directory cleared.');
-}
 
+}
 
 const writeFile = (filepath, data) => {
 

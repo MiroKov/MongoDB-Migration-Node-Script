@@ -1,5 +1,5 @@
 /node_modules
 /db
 /migration.js
-/migrations/data_1.json
+/migrations/
 /read-file.js
