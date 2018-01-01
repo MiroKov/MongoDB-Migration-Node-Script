@@ -57,7 +57,7 @@ exports.putTogether = (filepath1, filepath2, migrationDirPath, chunksize, select
     );
 }
 const migrationDirExists = (dirpath, next) => {
-    fs.access('/etc/passwd', fs.constants.R_OK | fs.constants.W_OK, (err) => {
+    fs.access(dirpath, fs.constants.R_OK | fs.constants.W_OK, (err) => {
         err ? next(false) : next(true);
     });
 }
