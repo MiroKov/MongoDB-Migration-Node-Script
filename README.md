@@ -12,7 +12,9 @@ Assumed that the order of the objects in each file correlates to objects in the 
 # Usage
 
 <p><strong><i>mongod [--dbpath < path to database >] </i></strong></p>
-<p><strong><i>node migrate-data.js < number of chunks ></i></strong></p>
+<p><strong><i>node migrate-data.js [< number of chunks >]</i></strong></p>
+
+Default number of chunks is <i>50</i>.
 
 Number of documents that are send parallel to the database = Total number of documents / number of chunks.
 
